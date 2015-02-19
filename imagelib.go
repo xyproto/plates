@@ -1,5 +1,5 @@
 // Package for dealing with RGB, HSV, HSL and PNG images
-package image
+package imagelib
 
 import (
 	"fmt"
