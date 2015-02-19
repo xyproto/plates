@@ -1,2 +1,2 @@
 # image
-Functions for dealing with png images, rgb and hsl
+Package for dealing with RGB, HSV, HSL and PNG images
