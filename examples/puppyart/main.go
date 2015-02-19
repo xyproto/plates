@@ -8,8 +8,8 @@ import (
 	"image/draw"
 )
 
-// Convert in.png to blue and yellow colorplates (mixed to green)
-// Higher threshold includes more colors.
+// TODO: refactor and comment
+
 func convert(infilename string, thresh uint8, t float64, color1, color2 color.RGBA) image.Image {
 	mixcolor := imagelib.PaintMix(color1, color2)
 
