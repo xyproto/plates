@@ -14,8 +14,6 @@ Online API documentation
 Example
 -------
 
-The imagelib functions can convert an image to a blue and a yellow representation that in combination approximates the yellow, blue and green in the image.
-
 Puppy
 
 <img src="https://raw.githubusercontent.com/xyproto/imagelib/master/examples/puppyart/puppy.png">
