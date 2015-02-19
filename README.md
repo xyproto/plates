@@ -18,8 +18,8 @@ The imagelib functions can convert an image to a blue and a yellow representatio
 
 Puppy
 
-[!puppy](examples/puppy.png)]
-[!puppy](https://raw.githubusercontent.com/xyproto/imagelib/master/examples/puppyart/puppy.png)
+<img src="examples/puppy.png">
+<img src="https://raw.githubusercontent.com/xyproto/imagelib/master/examples/puppyart/puppy.png">
 
 
 General information
