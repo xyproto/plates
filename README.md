@@ -11,8 +11,6 @@ Online API documentation
 Example
 -------
 
-Puppy
-
 <img src="https://raw.githubusercontent.com/xyproto/imagelib/master/examples/puppyart/puppy.png">
 
 Transformed output
