@@ -1,4 +1,4 @@
-// Package for dealing with RGB, HSV, HSL and PNG images
+// Package imagelib can deal with RGB, HSV, HSL and PNG images
 package imagelib
 
 import (
@@ -126,11 +126,11 @@ func BlueImage(m image.Image) image.Image {
 }
 
 // Absolute value
-func Abs(a uint8) uint8 {
+func Abs(a int8) uint8 {
 	if a < 0 {
-		return -a
+		return uint8(-a)
 	}
-	return a
+	return uint8(a)
 }
 
 // Absolute value
@@ -162,13 +162,13 @@ func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 			g = 0
 			b = 0
 			a = cr.A
-			if Abs(target.R-cr.R) < thresh {
+			if Abs(int8(target.R)-int8(cr.R)) < thresh {
 				r = target.R
 			}
-			if Abs(target.G-cr.G) < thresh {
+			if Abs(int8(target.G)-int8(cr.G)) < thresh {
 				g = target.G
 			}
-			if Abs(target.B-cr.B) < thresh {
+			if Abs(int8(target.B)-int8(cr.B)) < thresh {
 				b = target.B
 			}
 			c = color.RGBA{r, g, b, a}
@@ -200,7 +200,7 @@ func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
 			g = 0
 			b = 0
 			a = 0
-			if Abs(target.R-cr.R) < thresh || Abs(target.G-cr.G) < thresh || Abs(target.B-cr.B) < thresh {
+			if Abs(int8(target.R)-int8(cr.R)) < thresh || Abs(int8(target.G)-int8(cr.G)) < thresh || Abs(int8(target.B)-int8(cr.B)) < thresh {
 				r = target.R
 				g = target.G
 				b = target.B
@@ -253,21 +253,21 @@ func Hue(cr color.RGBA) float64 {
 	g := float64(cr.G) / 255.0
 	b := float64(cr.B) / 255.0
 	var h float64
-	rgb_max := r
-	if g > rgb_max {
-		rgb_max = g
+	RGBmax := r
+	if g > RGBmax {
+		RGBmax = g
 	}
-	if b > rgb_max {
-		rgb_max = b
+	if b > RGBmax {
+		RGBmax = b
 	}
-	if rgb_max == r {
+	if RGBmax == r {
 		h = 60 * (g - b)
 		if h < 0 {
 			h += 360
 		}
-	} else if rgb_max == g {
+	} else if RGBmax == g {
 		h = 120 + 60*(b-r)
-	} else /* rgb_max == rgb.b */ {
+	} else /* RGBmax == rgb.b */ {
 		h = 240 + 60*(r-g)
 	}
 	return h
@@ -276,28 +276,28 @@ func Hue(cr color.RGBA) float64 {
 // Convert RGB to HSV
 func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 	var hue, sat, val uint8
-	rgb_min := Min(cr.R, cr.G, cr.B)
-	rgb_max := Max(cr.R, cr.G, cr.B)
+	RGBmin := Min(cr.R, cr.G, cr.B)
+	RGBmax := Max(cr.R, cr.G, cr.B)
 
-	val = rgb_max
+	val = RGBmax
 	if val == 0 {
 		hue = 0
 		sat = 0
 		return hue, sat, val
 	}
 
-	sat = 255 * (rgb_max - rgb_min) / val
+	sat = 255 * (RGBmax - RGBmin) / val
 	if sat == 0 {
 		hue = 0
 		return hue, sat, val
 	}
 
-	span := (rgb_max - rgb_min)
-	if rgb_max == cr.R {
+	span := (RGBmax - RGBmin)
+	if RGBmax == cr.R {
 		hue = 43 * (cr.G - cr.B) / span
-	} else if rgb_max == cr.G {
+	} else if RGBmax == cr.G {
 		hue = 85 + 43*(cr.B-cr.R)/span
-	} else { /* rgb_max == cr.B */
+	} else { /* RGBmax == cr.B */
 		hue = 171 + 43*(cr.R-cr.G)/span
 	}
 
@@ -336,7 +336,7 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 			if ((Fabs(h-hue1) < Fabs(h-hue2)) && (Fabs(h-hue1) < Fabs(h-hue3))) ||
 				((Fabs(s-s1) < Fabs(s-s2)) && (Fabs(s-s1) < Fabs(s-s3))) {
 				// Only add if the color is close enough
-				if Abs(color1.R-cr.R) < thresh || Abs(color1.G-cr.G) < thresh || Abs(color1.B-cr.B) < thresh {
+				if Abs(int8(color1.R)-int8(cr.R)) < thresh || Abs(int8(color1.G)-int8(cr.G)) < thresh || Abs(int8(color1.B)-int8(cr.B)) < thresh {
 					r = color1.R
 					g = color1.G
 					b = color1.B
@@ -345,7 +345,7 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 			} else if ((Fabs(h-hue2) < Fabs(h-hue1)) && (Fabs(h-hue2) < Fabs(h-hue3))) ||
 				((Fabs(s-s2) < Fabs(s-s1)) && (Fabs(s-s2) < Fabs(s-s3))) {
 				// Only add if the color is close enough
-				if Abs(color2.R-cr.R) < thresh || Abs(color2.G-cr.G) < thresh || Abs(color2.B-cr.B) < thresh {
+				if Abs(int8(color2.R)-int8(cr.R)) < thresh || Abs(int8(color2.G)-int8(cr.G)) < thresh || Abs(int8(color2.B)-int8(cr.B)) < thresh {
 					r = color2.R
 					g = color2.G
 					b = color2.B
@@ -353,7 +353,7 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 				}
 			} else if ((Fabs(h-hue3) < Fabs(h-hue1)) && (Fabs(h-hue3) < Fabs(h-hue2))) ||
 				((Fabs(s-s3) < Fabs(s-s1)) && (Fabs(s-s3) < Fabs(s-s2))) {
-				if Abs(color3.R-cr.R) < thresh || Abs(color3.G-cr.G) < thresh || Abs(color3.B-cr.B) < thresh {
+				if Abs(int8(color3.R)-int8(cr.R)) < thresh || Abs(int8(color3.G)-int8(cr.G)) < thresh || Abs(int8(color3.B)-int8(cr.B)) < thresh {
 					r = color3.R
 					g = color3.G
 					b = color3.B
@@ -433,25 +433,25 @@ func HLS(r, g, b float64) (float64, float64, float64) {
 
 // Ported from Python colorsys
 func _v(m1, m2, hue float64) float64 {
-	ONE_SIXTH := 1.0 / 6.0
-	TWO_THIRD := 2.0 / 3.0
+	oneSixth := 1.0 / 6.0
+	twoThird := 2.0 / 3.0
 	hue = math.Mod(hue, 1.0)
-	if hue < ONE_SIXTH {
+	if hue < oneSixth {
 		return m1 + (m2-m1)*hue*6.0
 	}
 	if hue < 0.5 {
 		return m2
 	}
-	if hue < TWO_THIRD {
-		return m1 + (m2-m1)*(TWO_THIRD-hue)*6.0
+	if hue < twoThird {
+		return m1 + (m2-m1)*(twoThird-hue)*6.0
 	}
 	return m1
 }
 
 // Convert a HLS color to RGB
-func HLS_to_RGB(h, l, s float64) (float64, float64, float64) {
+func HLStoRGB(h, l, s float64) (float64, float64, float64) {
 	// Ported from Python colorsys
-	ONE_THIRD := 1.0 / 3.0
+	oneThird := 1.0 / 3.0
 	if s == 0.0 {
 		return l, l, l
 	}
@@ -462,7 +462,7 @@ func HLS_to_RGB(h, l, s float64) (float64, float64, float64) {
 		m2 = l + s - (l * s)
 	}
 	m1 := 2.0*l - m2
-	return _v(m1, m2, h+ONE_THIRD), _v(m1, m2, h), _v(m1, m2, h-ONE_THIRD)
+	return _v(m1, m2, h+oneThird), _v(m1, m2, h), _v(m1, m2, h-oneThird)
 }
 
 // Mix two RGB colors, a bit like how paint mixes
@@ -488,6 +488,6 @@ func PaintMix(c1, c2 color.RGBA) color.RGBA {
 	} else {
 		s = 0.0
 	}
-	r, g, b := HLS_to_RGB(h, l, s)
+	r, g, b := HLStoRGB(h, l, s)
 	return color.RGBA{uint8(r * 255.0), uint8(g * 255.0), uint8(b * 255.0), 255}
 }
