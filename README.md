@@ -24,4 +24,5 @@ General information
 -------------------
 
 * License: MIT
-* Author: Alexander F Rødseth
+* Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
+* Version: 0.0.0

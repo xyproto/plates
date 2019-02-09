@@ -16,7 +16,10 @@ func convert(infilename string, thresh uint8, t float64, color1, color2 color.RG
 	fmt.Println("(", mixcolor.R, mixcolor.G, mixcolor.B, ")")
 
 	// Input image
-	img := imagelib.ReadPNG(infilename)
+	img, err := imagelib.Read(infilename)
+	if err != nil {
+		panic(err)
+	}
 
 	// Separate the image to color1, mixcolor and color2, with given threshold
 	images := imagelib.Separate(img, color1, mixcolor, color2, thresh, t)
@@ -72,5 +75,8 @@ func main() {
 	fmt.Println(destrect)
 	draw.Draw(newimage, destrect, image4, zero, draw.Src)
 
-	imagelib.WritePNG(newimage, "out.png")
+	err := imagelib.Write("out.png", newimage)
+	if err != nil {
+		panic(err)
+	}
 }

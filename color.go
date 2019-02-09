@@ -2,74 +2,19 @@
 package imagelib
 
 import (
-	"fmt"
 	"image"
 	"image/color"
-	"image/png"
 	"math"
-	"os"
 )
 
-var verbose = true
-
-// Don't write information to stdout
-func Quiet() {
-	verbose = false
-}
-
-// Write information to stdout (on by default)
-func Verbose() {
-	verbose = true
-}
-
-// Read a PNG file into an Image structure
-func ReadPNG(filename string) image.Image {
-	f, err := os.Open(filename)
-	if err != nil {
-		panic(err)
-	}
-	// m is image
-	if verbose {
-		fmt.Printf("Reading %s...", filename)
-	}
-	m, err := png.Decode(f)
-	if err != nil {
-		panic(err)
-	}
-	if verbose {
-		fmt.Println("done")
-	}
-	return m
-}
-
-// Write an Image structure to a PNG file
-func WritePNG(m image.Image, filename string) {
-	f, err := os.Create(filename)
-	if err != nil {
-		panic(err)
-	}
-	if verbose {
-		fmt.Printf("Writing %s...", filename)
-	}
-	if err := png.Encode(f, m); err != nil {
-		panic(err)
-	}
-	if verbose {
-		fmt.Println("done")
-	}
-}
-
 // Pick out only the red colors from an image
-func RedImage(m image.Image) image.Image {
-	if verbose {
-		fmt.Println(m.Bounds()) // image.Rectangle; .Min, .Max; .X, .Y
-	}
+func Red(m image.Image) image.Image {
 	var (
-		rect image.Rectangle = m.Bounds()
-		c    color.Color
-		cr   color.RGBA
+		rect     = m.Bounds()
+		c        color.Color
+		cr       color.RGBA
+		newImage = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	)
-	newImage := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
 			c = m.At(x, y)      // c is RGBAColor, which implements Color
@@ -82,16 +27,13 @@ func RedImage(m image.Image) image.Image {
 }
 
 // Pick out only the green colors from an image
-func GreenImage(m image.Image) image.Image {
-	if verbose {
-		fmt.Println(m.Bounds()) // image.Rectangle; .Min, .Max; .X, .Y
-	}
+func Green(m image.Image) image.Image {
 	var (
-		rect image.Rectangle = m.Bounds()
-		c    color.Color
-		cr   color.RGBA
+		rect     = m.Bounds()
+		c        color.Color
+		cr       color.RGBA
+		newImage = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	)
-	newImage := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
 			c = m.At(x, y)      // c is RGBAColor, which implements Color
@@ -104,16 +46,13 @@ func GreenImage(m image.Image) image.Image {
 }
 
 // Pick out only the blue colors from an image
-func BlueImage(m image.Image) image.Image {
-	if verbose {
-		fmt.Println(m.Bounds()) // image.Rectangle; .Min, .Max; .X, .Y
-	}
+func Blue(m image.Image) image.Image {
 	var (
-		rect image.Rectangle = m.Bounds()
-		c    color.Color
-		cr   color.RGBA
+		rect     = m.Bounds()
+		c        color.Color
+		cr       color.RGBA
+		newImage = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	)
-	newImage := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
 			c = m.At(x, y)      // c is RGBAColor, which implements Color
@@ -125,35 +64,16 @@ func BlueImage(m image.Image) image.Image {
 	return newImage
 }
 
-// Absolute value
-func Abs(a int8) uint8 {
-	if a < 0 {
-		return uint8(-a)
-	}
-	return uint8(a)
-}
-
-// Absolute value
-func Fabs(a float64) float64 {
-	if a < 0 {
-		return -a
-	}
-	return a
-}
-
 // Pick out only the colors close to the given color,
 // within a given threshold
 func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
-	if verbose {
-		fmt.Println(m.Bounds()) // image.Rectangle; .Min, .Max; .X, .Y
-	}
 	var (
-		rect       image.Rectangle = m.Bounds()
+		rect       = m.Bounds()
 		c          color.Color
 		cr         color.RGBA
 		r, g, b, a uint8
+		newImage   = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	)
-	newImage := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
 			c = m.At(x, y)      // c is RGBAColor, which implements Color
@@ -162,13 +82,13 @@ func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 			g = 0
 			b = 0
 			a = cr.A
-			if Abs(int8(target.R)-int8(cr.R)) < thresh {
+			if abs(int8(target.R)-int8(cr.R)) < thresh {
 				r = target.R
 			}
-			if Abs(int8(target.G)-int8(cr.G)) < thresh {
+			if abs(int8(target.G)-int8(cr.G)) < thresh {
 				g = target.G
 			}
-			if Abs(int8(target.B)-int8(cr.B)) < thresh {
+			if abs(int8(target.B)-int8(cr.B)) < thresh {
 				b = target.B
 			}
 			c = color.RGBA{r, g, b, a}
@@ -182,16 +102,13 @@ func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 // within a given threshold. Make it uniform.
 // Zero alpha to unused pixels in returned image.
 func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
-	if verbose {
-		fmt.Println(m.Bounds()) // image.Rectangle; .Min, .Max; .X, .Y
-	}
 	var (
-		rect       image.Rectangle = m.Bounds()
+		rect       = m.Bounds()
 		c          color.Color
 		cr         color.RGBA
 		r, g, b, a uint8
+		newImage   = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	)
-	newImage := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
 			c = m.At(x, y)      // c is RGBAColor, which implements Color
@@ -200,7 +117,7 @@ func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
 			g = 0
 			b = 0
 			a = 0
-			if Abs(int8(target.R)-int8(cr.R)) < thresh || Abs(int8(target.G)-int8(cr.G)) < thresh || Abs(int8(target.B)-int8(cr.B)) < thresh {
+			if abs(int8(target.R)-int8(cr.R)) < thresh || abs(int8(target.G)-int8(cr.G)) < thresh || abs(int8(target.B)-int8(cr.B)) < thresh {
 				r = target.R
 				g = target.G
 				b = target.B
@@ -215,14 +132,13 @@ func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
 
 // Take orig, add the nontransparent colors from addimage, as addascolor
 func AddToAs(orig image.Image, addimage image.Image, addcolor color.RGBA) image.Image {
-	if verbose {
-		fmt.Print("Adding one image to another...")
-	}
-	var rect image.Rectangle = addimage.Bounds()
-	var c color.Color
-	var cr, or color.RGBA
-	var r, g, b, a uint8
-	newImage := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
+	var (
+		rect       = addimage.Bounds()
+		c          color.Color
+		cr, or     color.RGBA
+		r, g, b, a uint8
+		newImage   = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
+	)
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
 			cr = addimage.At(x, y).(color.RGBA)
@@ -240,9 +156,6 @@ func AddToAs(orig image.Image, addimage image.Image, addcolor color.RGBA) image.
 			c = color.RGBA{r, g, b, a}
 			newImage.Set(x-rect.Min.X, y-rect.Min.Y, c)
 		}
-	}
-	if verbose {
-		fmt.Println("done")
 	}
 	return newImage
 }
@@ -276,8 +189,8 @@ func Hue(cr color.RGBA) float64 {
 // Convert RGB to HSV
 func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 	var hue, sat, val uint8
-	RGBmin := Min(cr.R, cr.G, cr.B)
-	RGBmax := Max(cr.R, cr.G, cr.B)
+	RGBmin := min(cr.R, cr.G, cr.B)
+	RGBmax := max(cr.R, cr.G, cr.B)
 
 	val = RGBmax
 	if val == 0 {
@@ -306,19 +219,16 @@ func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 
 // Separate an image into three colors, with a given threshold
 func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8, t float64) []image.Image {
-	if verbose {
-		fmt.Print("Separating...")
-	}
 	var (
-		rect       image.Rectangle = inImage.Bounds()
+		rect       = inImage.Bounds()
 		cr         color.RGBA
 		r, g, b, a uint8
 		h, s       float64
+		images     = make([]image.Image, 3) // 3 is the number of images
+		newImage1  = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
+		newImage2  = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
+		newImage3  = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	)
-	images := make([]image.Image, 3) // 3 is the number of images
-	newImage1 := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
-	newImage2 := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
-	newImage3 := image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 	hue1, _, s1 := HLS(float64(color1.R)/255.0, float64(color1.G)/255.0, float64(color1.B)/255.0)
 	hue2, _, s2 := HLS(float64(color2.R)/255.0, float64(color2.G)/255.0, float64(color2.B)/255.0)
 	hue3, _, s3 := HLS(float64(color3.R)/255.0, float64(color3.G)/255.0, float64(color3.B)/255.0)
@@ -333,27 +243,27 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 			a = 255
 			h, _, s = HLS(float64(cr.R)/255.0, float64(cr.G)/255.0, float64(cr.B)/255.0)
 			// Find the closest color of the three, measured in hue and saturation
-			if ((Fabs(h-hue1) < Fabs(h-hue2)) && (Fabs(h-hue1) < Fabs(h-hue3))) ||
-				((Fabs(s-s1) < Fabs(s-s2)) && (Fabs(s-s1) < Fabs(s-s3))) {
+			if ((fabs(h-hue1) < fabs(h-hue2)) && (fabs(h-hue1) < fabs(h-hue3))) ||
+				((fabs(s-s1) < fabs(s-s2)) && (fabs(s-s1) < fabs(s-s3))) {
 				// Only add if the color is close enough
-				if Abs(int8(color1.R)-int8(cr.R)) < thresh || Abs(int8(color1.G)-int8(cr.G)) < thresh || Abs(int8(color1.B)-int8(cr.B)) < thresh {
+				if abs(int8(color1.R)-int8(cr.R)) < thresh || abs(int8(color1.G)-int8(cr.G)) < thresh || abs(int8(color1.B)-int8(cr.B)) < thresh {
 					r = color1.R
 					g = color1.G
 					b = color1.B
 					newImage1.Set(x-rect.Min.X, y-rect.Min.Y, color.RGBA{r, g, b, a})
 				}
-			} else if ((Fabs(h-hue2) < Fabs(h-hue1)) && (Fabs(h-hue2) < Fabs(h-hue3))) ||
-				((Fabs(s-s2) < Fabs(s-s1)) && (Fabs(s-s2) < Fabs(s-s3))) {
+			} else if ((fabs(h-hue2) < fabs(h-hue1)) && (fabs(h-hue2) < fabs(h-hue3))) ||
+				((fabs(s-s2) < fabs(s-s1)) && (fabs(s-s2) < fabs(s-s3))) {
 				// Only add if the color is close enough
-				if Abs(int8(color2.R)-int8(cr.R)) < thresh || Abs(int8(color2.G)-int8(cr.G)) < thresh || Abs(int8(color2.B)-int8(cr.B)) < thresh {
+				if abs(int8(color2.R)-int8(cr.R)) < thresh || abs(int8(color2.G)-int8(cr.G)) < thresh || abs(int8(color2.B)-int8(cr.B)) < thresh {
 					r = color2.R
 					g = color2.G
 					b = color2.B
 					newImage2.Set(x-rect.Min.X, y-rect.Min.Y, color.RGBA{r, g, b, a})
 				}
-			} else if ((Fabs(h-hue3) < Fabs(h-hue1)) && (Fabs(h-hue3) < Fabs(h-hue2))) ||
-				((Fabs(s-s3) < Fabs(s-s1)) && (Fabs(s-s3) < Fabs(s-s2))) {
-				if Abs(int8(color3.R)-int8(cr.R)) < thresh || Abs(int8(color3.G)-int8(cr.G)) < thresh || Abs(int8(color3.B)-int8(cr.B)) < thresh {
+			} else if ((fabs(h-hue3) < fabs(h-hue1)) && (fabs(h-hue3) < fabs(h-hue2))) ||
+				((fabs(s-s3) < fabs(s-s1)) && (fabs(s-s3) < fabs(s-s2))) {
+				if abs(int8(color3.R)-int8(cr.R)) < thresh || abs(int8(color3.G)-int8(cr.G)) < thresh || abs(int8(color3.B)-int8(cr.B)) < thresh {
 					r = color3.R
 					g = color3.G
 					b = color3.B
@@ -365,48 +275,15 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 	images[0] = newImage1
 	images[1] = newImage2
 	images[2] = newImage3
-	if verbose {
-		fmt.Println("done")
-	}
 	return images
-}
-
-// Smallest of three numbers
-func Min(a, b, c uint8) uint8 {
-	if (a < b) && (a < c) {
-		return a
-	} else if (b < a) && (b < c) {
-		return b
-	}
-	return c
-}
-
-// Largest of three numbers
-func Max(a, b, c uint8) uint8 {
-	if (a >= b) && (a >= c) {
-		return a
-	} else if (b >= a) && (b >= c) {
-		return b
-	}
-	return c
-}
-
-// Smallest of three floats
-func Fmin(a, b, c float64) float64 {
-	return math.Min(math.Min(a, b), c)
-}
-
-// Largest of three floats
-func Fmax(a, b, c float64) float64 {
-	return math.Max(math.Max(a, b), c)
 }
 
 // Convert RGB to HLS
 func HLS(r, g, b float64) (float64, float64, float64) {
 	// Ported from Python colorsys
 	var h, l, s float64
-	maxc := Fmax(r, g, b)
-	minc := Fmin(r, g, b)
+	maxc := fmax(r, g, b)
+	minc := fmin(r, g, b)
 	l = (minc + maxc) / 2.0
 	if minc == maxc {
 		return 0.0, l, 0.0
