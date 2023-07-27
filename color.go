@@ -346,7 +346,7 @@ func HLStoRGB(h, l, s float64) (float64, float64, float64) {
 func PaintMix(c1, c2 color.RGBA) color.RGBA {
 	// Thanks to Mark Ransom via stackoverflow
 
-	// The less pi-presition, the greener the mix between blue and yellow
+	// The less pi-precision, the greener the mix between blue and yellow
 	// Using math.Pi gives a completely different result, for some reason
 	//pi := math.Pi
 	//pi := 3.141592653589793
