@@ -1,4 +1,4 @@
-# imagelib [![Build Status](https://travis-ci.org/xyproto/imagelib.svg?branch=master)](https://travis-ci.org/xyproto/imagelib) [![GoDoc](https://godoc.org/github.com/xyproto/imagelib?status.svg)](http://godoc.org/github.com/xyproto/imagelib)
+# imagelib [![GoDoc](https://godoc.org/github.com/xyproto/imagelib?status.svg)](http://godoc.org/github.com/xyproto/imagelib)
 
 Package for dealing with RGB, HSV, HSL and PNG images.
 
