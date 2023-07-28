@@ -1,0 +1,9 @@
+# github.com/biessek/golang-ico v0.0.0-20180326222316-d348d9ea4670
+## explicit
+github.com/biessek/golang-ico
+# github.com/chai2010/webp v1.1.1
+## explicit; go 1.17
+github.com/chai2010/webp
+# github.com/jsummers/gobmp v0.0.0-20230614200233-a9de23ed2e25
+## explicit
+github.com/jsummers/gobmp
