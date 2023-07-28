@@ -9,6 +9,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	ico "github.com/biessek/golang-ico"
+	"github.com/chai2010/webp"
+	bmp "github.com/jsummers/gobmp"
 )
 
 func Read(filename string) (image.Image, error) {
@@ -24,6 +28,13 @@ func Read(filename string) (image.Image, error) {
 		return jpeg.Decode(f)
 	case ".gif":
 		return gif.Decode(f)
+	case ".ico":
+		return ico.Decode(f)
+	case ".bmp":
+		return bmp.Decode(f)
+	case ".webp":
+		return webp.Decode(f)
+
 	}
 	return nil, errors.New("unrecognized file extension: " + filepath.Ext(filename))
 }
@@ -41,6 +52,12 @@ func Write(filename string, img image.Image) error {
 		return jpeg.Encode(f, img, nil)
 	case ".gif":
 		return gif.Encode(f, img, nil)
+	case ".ico":
+		return ico.Encode(f, img)
+	case ".bmp":
+		return bmp.Encode(f, img)
+	case ".webp":
+		return webp.Encode(f, img, nil)
 	}
 	return errors.New("unrecognized file extension: " + filepath.Ext(filename))
 }
