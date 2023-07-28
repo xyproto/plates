@@ -2,10 +2,7 @@
 
 Package for dealing with RGB, HSV and HSL colors, reading and writing images.
 
-Online API documentation
-------------------------
-
-[godoc.org](http://godoc.org/github.com/xyproto/imagelib)
+* [Online API documentation](http://godoc.org/github.com/xyproto/imagelib)
 
 
 Example
