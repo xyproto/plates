@@ -218,7 +218,7 @@ func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 }
 
 // Separate an image into three colors, with a given threshold
-func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8, t float64) []image.Image {
+func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8, _ float64) []image.Image {
 	var (
 		rect       = inImage.Bounds()
 		cr         color.RGBA
@@ -308,10 +308,12 @@ func HLS(r, g, b float64) (float64, float64, float64) {
 	return h, l, s
 }
 
-// Ported from Python colorsys
-func _v(m1, m2, hue float64) float64 {
-	oneSixth := 1.0 / 6.0
-	twoThird := 2.0 / 3.0
+// computeColorChannel computes the value of a color channel based on hue, m1 and m2,
+// according to the HLS color model. Ported from Python colorsys.
+func computeColorChannel(m1, m2, hue float64) float64 {
+	const oneSixth = 1.0 / 6.0
+	const twoThird = 2.0 / 3.0
+
 	hue = math.Mod(hue, 1.0)
 	if hue < oneSixth {
 		return m1 + (m2-m1)*hue*6.0
@@ -327,41 +329,43 @@ func _v(m1, m2, hue float64) float64 {
 
 // Convert a HLS color to RGB
 func HLStoRGB(h, l, s float64) (float64, float64, float64) {
-	// Ported from Python colorsys
-	oneThird := 1.0 / 3.0
+	const oneThird = 1.0 / 3.0
+
 	if s == 0.0 {
 		return l, l, l
 	}
-	var m2 float64
+
+	var m1, m2 float64
+
+	// Ported from Python colorsys
 	if l <= 0.5 {
 		m2 = l * (1.0 + s)
 	} else {
 		m2 = l + s - (l * s)
 	}
-	m1 := 2.0*l - m2
-	return _v(m1, m2, h+oneThird), _v(m1, m2, h), _v(m1, m2, h-oneThird)
+	m1 = 2.0*l - m2
+	return computeColorChannel(m1, m2, h+oneThird), computeColorChannel(m1, m2, h), computeColorChannel(m1, m2, h-oneThird)
 }
 
 // Mix two RGB colors, a bit like how paint mixes
 func PaintMix(c1, c2 color.RGBA) color.RGBA {
+	// The less pi-precision, the greener the mix between blue and yellow.
+	// Curiously, using math.Pi gives a completely different result.
+	//const twoPi = 2.0 * math.Pi
+	//const twoPi = 2.0 * 3.141592653589793
+	const twoPi = 2.0 * 3.141592653
+	//const twoPi = 2.0 * 3.1415
+
 	// Thanks to Mark Ransom via stackoverflow
-
-	// The less pi-precision, the greener the mix between blue and yellow
-	// Using math.Pi gives a completely different result, for some reason
-	//pi := math.Pi
-	//pi := 3.141592653589793
-	pi := 3.141592653
-	//pi := 3.1415
-
 	h1, l1, s1 := HLS(float64(c1.R)/255.0, float64(c1.G)/255.0, float64(c1.B)/255.0)
 	h2, l2, s2 := HLS(float64(c2.R)/255.0, float64(c2.G)/255.0, float64(c2.B)/255.0)
 	h := 0.0
 	s := 0.5 * (s1 + s2)
 	l := 0.5 * (l1 + l2)
-	x := math.Cos(2.0*pi*h1) + math.Cos(2.0*pi*h2)
-	y := math.Sin(2.0*pi*h1) + math.Sin(2.0*pi*h2)
+	x := math.Cos(twoPi*h1) + math.Cos(twoPi*h2)
+	y := math.Sin(twoPi*h1) + math.Sin(twoPi*h2)
 	if (x != 0.0) || (y != 0.0) {
-		h = math.Atan2(y, x) / (2.0 * pi)
+		h = math.Atan2(y, x) / twoPi
 	} else {
 		s = 0.0
 	}
