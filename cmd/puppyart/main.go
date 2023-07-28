@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/xyproto/imagelib"
 	"image"
 	"image/color"
 	"image/draw"
+
+	"github.com/xyproto/imagelib"
 )
 
 // TODO: refactor and comment
@@ -75,7 +76,7 @@ func main() {
 	fmt.Println(destrect)
 	draw.Draw(newimage, destrect, image4, zero, draw.Src)
 
-	err := imagelib.Write("out.png", newimage)
+	err := imagelib.Write("generated.png", newimage)
 	if err != nil {
 		panic(err)
 	}
