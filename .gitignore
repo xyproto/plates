@@ -23,4 +23,5 @@ _testmain.go
 *.test
 *.prof
 
-examples/puppyart/puppyart
+cmd/puppyart/puppyart
+cmd/puppyart/out.png
