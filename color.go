@@ -218,14 +218,13 @@ func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 	return hue, sat, val
 }
 
-// Separate an image into three colors, with a given threshold
-func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8, _ float64) []image.Image {
+// Separate3 an image into three images with the three given colors and a given threshold.
+func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8) (image.Image, image.Image, image.Image) {
 	var (
 		rect       = inImage.Bounds()
 		cr         color.RGBA
 		r, g, b, a uint8
 		h, s       float64
-		images     = make([]image.Image, 3) // 3 is the number of images
 		newImage1  = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 		newImage2  = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
 		newImage3  = image.NewRGBA(image.Rect(0, 0, rect.Max.X-rect.Min.X, rect.Max.Y-rect.Min.Y))
@@ -273,10 +272,14 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 			}
 		}
 	}
-	images[0] = newImage1
-	images[1] = newImage2
-	images[2] = newImage3
-	return images
+	return newImage1, newImage2, newImage3
+}
+
+// Separate an image into three images with the three given colors and a given threshold.
+// This is the same functionality as the Separate3 function, but with a different function signature.
+func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8, _ float64) []image.Image {
+	image1, image2, image3 := Separate3(inImage, color1, color2, color3, thresh)
+	return []image.Image{image1, image2, image3}
 }
 
 // HLS will convert an RGB color to hue, lightness and saturation
