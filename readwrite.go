@@ -13,6 +13,7 @@ import (
 	ico "github.com/biessek/golang-ico"
 	"github.com/chai2010/webp"
 	bmp "github.com/jsummers/gobmp"
+	"github.com/xyproto/xpm"
 )
 
 func Read(filename string) (image.Image, error) {
@@ -58,6 +59,8 @@ func Write(filename string, img image.Image) error {
 		return bmp.Encode(f, img)
 	case ".webp":
 		return webp.Encode(f, img, nil)
+	case ".xpm":
+		return xpm.Encode(f, img)
 	}
 	return errors.New("unrecognized file extension: " + filepath.Ext(filename))
 }
