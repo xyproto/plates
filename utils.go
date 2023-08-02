@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// Smallest of three numbers
+// Smallest of three bytes
 func min(a, b, c uint8) uint8 {
 	if (a < b) && (a < c) {
 		return a
@@ -14,7 +14,7 @@ func min(a, b, c uint8) uint8 {
 	return c
 }
 
-// Largest of three numbers
+// Largest of three bytes
 func max(a, b, c uint8) uint8 {
 	if (a >= b) && (a >= c) {
 		return a
@@ -44,8 +44,5 @@ func abs(a int8) uint8 {
 
 // Absolute value
 func fabs(a float64) float64 {
-	if a < 0 {
-		return -a
-	}
-	return a
+	return math.Abs(a)
 }
