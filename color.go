@@ -7,7 +7,7 @@ import (
 	"math"
 )
 
-// Pick out only the red colors from an image
+// Red will pick out only the red colors from an image and return an image
 func Red(m image.Image) image.Image {
 	var (
 		rect     = m.Bounds()
@@ -26,7 +26,7 @@ func Red(m image.Image) image.Image {
 	return newImage
 }
 
-// Pick out only the green colors from an image
+// Green will pick out only the green colors from an image and return an image
 func Green(m image.Image) image.Image {
 	var (
 		rect     = m.Bounds()
@@ -45,7 +45,7 @@ func Green(m image.Image) image.Image {
 	return newImage
 }
 
-// Pick out only the blue colors from an image
+// Blue will pick out only the blue colors from an image and return an image
 func Blue(m image.Image) image.Image {
 	var (
 		rect     = m.Bounds()
@@ -64,8 +64,8 @@ func Blue(m image.Image) image.Image {
 	return newImage
 }
 
-// Pick out only the colors close to the given color,
-// within a given threshold
+// CloseTo1 will pick out only the colors close to the given color,
+// within a given threshold, and return an image.
 func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 	var (
 		rect       = m.Bounds()
@@ -98,7 +98,7 @@ func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 	return newImage
 }
 
-// Pick out only the colors close to the given color,
+// CloseTo2 will pick out only the colors close to the given color,
 // within a given threshold. Make it uniform.
 // Zero alpha to unused pixels in returned image.
 func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
@@ -130,7 +130,8 @@ func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
 	return newImage
 }
 
-// Take orig, add the nontransparent colors from addimage, as addascolor
+// AddToAs will take an image, add the nontransparent colors from addimage,
+// use addcolor and return an image.
 func AddToAs(orig image.Image, addimage image.Image, addcolor color.RGBA) image.Image {
 	var (
 		rect       = addimage.Bounds()
@@ -160,7 +161,7 @@ func AddToAs(orig image.Image, addimage image.Image, addcolor color.RGBA) image.
 	return newImage
 }
 
-// Convert RGB to hue
+// Hue will convert an RGB color to a Hue float
 func Hue(cr color.RGBA) float64 {
 	r := float64(cr.R) / 255.0
 	g := float64(cr.G) / 255.0
@@ -186,7 +187,7 @@ func Hue(cr color.RGBA) float64 {
 	return h
 }
 
-// Convert RGB to HSV
+// HSV will convert an RGB color to huse, saturation and value
 func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 	var hue, sat, val uint8
 	RGBmin := min(cr.R, cr.G, cr.B)
@@ -278,7 +279,7 @@ func Separate(inImage image.Image, color1, color2, color3 color.RGBA, thresh uin
 	return images
 }
 
-// Convert RGB to HLS
+// HLS will convert an RGB color to hue, lightness and saturation
 func HLS(r, g, b float64) (float64, float64, float64) {
 	// Ported from Python colorsys
 	var h, l, s float64
@@ -327,7 +328,7 @@ func computeColorChannel(m1, m2, hue float64) float64 {
 	return m1
 }
 
-// Convert a HLS color to RGB
+// HLStoRGB will convert a HLS color to red, green, blue
 func HLStoRGB(h, l, s float64) (float64, float64, float64) {
 	const oneThird = 1.0 / 3.0
 
@@ -347,16 +348,19 @@ func HLStoRGB(h, l, s float64) (float64, float64, float64) {
 	return computeColorChannel(m1, m2, h+oneThird), computeColorChannel(m1, m2, h), computeColorChannel(m1, m2, h-oneThird)
 }
 
-// Mix two RGB colors, a bit like how paint mixes
+// PaintMix will attempt to mix two RGB colors, a bit like how paint mixes (but not exactly like it)
 func PaintMix(c1, c2 color.RGBA) color.RGBA {
-	// The less pi-precision, the greener the mix between blue and yellow.
-	// Curiously, using math.Pi gives a completely different result.
-	//const twoPi = 2.0 * math.Pi
-	//const twoPi = 2.0 * 3.141592653589793
-	const twoPi = 2.0 * 3.141592653
-	//const twoPi = 2.0 * 3.1415
 
-	// Thanks to Mark Ransom via stackoverflow
+	/*
+	 * The less pi-precision, the greener the mix between blue and yellow.
+	 * Curiously, using math.Pi gives a completely different result.
+	 */
+	const twoPi = 2.0 * 3.141592653
+	//const twoPi = 2.0 * math.Pi
+	//const twoPi = 2.0 * 3.1415
+	//const twoPi = 2.0 * 3.141592653589793
+
+	// Thanks to Mark Ransom
 	h1, l1, s1 := HLS(float64(c1.R)/255.0, float64(c1.G)/255.0, float64(c1.B)/255.0)
 	h2, l2, s2 := HLS(float64(c2.R)/255.0, float64(c2.G)/255.0, float64(c2.B)/255.0)
 	h := 0.0
@@ -369,6 +373,7 @@ func PaintMix(c1, c2 color.RGBA) color.RGBA {
 	} else {
 		s = 0.0
 	}
+
 	r, g, b := HLStoRGB(h, l, s)
 	return color.RGBA{uint8(r * 255.0), uint8(g * 255.0), uint8(b * 255.0), 255}
 }
