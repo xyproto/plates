@@ -9,9 +9,9 @@ import (
 	"github.com/xyproto/imagelib"
 )
 
-// convert takes an image file and modifies it based on a specified threshold, intensity, and two colors.
+// convert takes an image file and modifies it based on a specified threshold and two given colors.
 // It returns a processed image.
-func convert(infilename string, thresh uint8, t float64, color1, color2 color.RGBA) image.Image {
+func convert(infilename string, thresh uint8, color1, color2 color.RGBA) image.Image {
 	// Combine the two colors to create a mixed color
 	mixcolor := imagelib.PaintMix(color1, color2)
 
@@ -22,8 +22,7 @@ func convert(infilename string, thresh uint8, t float64, color1, color2 color.RG
 	}
 
 	// Separate the image into three based on the specified threshold and intensity: color1, mixcolor, and color2.
-	images := imagelib.Separate(img, color1, mixcolor, color2, thresh, t)
-	color1image, mixcolorimage, color2image := images[0], images[1], images[2]
+	color1image, mixcolorimage, color2image := imagelib.Separate3(img, color1, mixcolor, color2, thresh)
 
 	// Combine the color1 image and mixcolor image to create a new image plate with color1
 	color1plate := imagelib.AddToAs(color1image, mixcolorimage, color1)
@@ -39,10 +38,10 @@ func convert(infilename string, thresh uint8, t float64, color1, color2 color.RG
 func main() {
 	// Define input colors and process the image using convert function.
 	// Repeat this process for different color combinations.
-	image1 := convert("puppy.png", 255, 1.0, color.RGBA{0, 0, 255, 255}, color.RGBA{255, 255, 255, 255})
-	image2 := convert("puppy.png", 255, 1.0, color.RGBA{16, 63, 255, 255}, color.RGBA{0, 0, 0, 255})
-	image3 := convert("puppy.png", 255, 1.0, color.RGBA{255, 0, 0, 255}, color.RGBA{255, 255, 0, 255})
-	image4 := convert("puppy.png", 255, 1.0, color.RGBA{16, 255, 255, 255}, color.RGBA{255, 0, 255, 255})
+	image1 := convert("puppy.png", 255, color.RGBA{0, 0, 255, 255}, color.RGBA{255, 255, 255, 255})
+	image2 := convert("puppy.png", 255, color.RGBA{16, 63, 255, 255}, color.RGBA{0, 0, 0, 255})
+	image3 := convert("puppy.png", 255, color.RGBA{255, 0, 0, 255}, color.RGBA{255, 255, 0, 255})
+	image4 := convert("puppy.png", 255, color.RGBA{16, 255, 255, 255}, color.RGBA{255, 0, 255, 255})
 
 	// Create a new image to contain the 4 processed images.
 	width := image1.Bounds().Dx() * 2
