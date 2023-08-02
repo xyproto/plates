@@ -7,15 +7,19 @@ Package for dealing with RGB, HSV and HSL colors, reading and writing images.
 
 ## Example
 
+### Original image
+
 [![puppy](cmd/puppyart/puppy.png)](https://www.flickr.com/photos/49021451@N00/5679373686)
 
-The above image is by Andrea Schaffer and is licensed under the [Creative Commons Attribution 2.0 Generic license](https://creativecommons.org/licenses/by/2.0/).
+The above image is by Andrea Schaffer and is licensed under [cc-by-2.0](https://creativecommons.org/licenses/by/2.0/).
 
-### Transformed output
+### Generated image
 
 ![puppy](img/generated.png)
 
-The above image was generated with the following program:
+### Example program
+
+The generated image was created with the following program:
 
 ```go
 package main
