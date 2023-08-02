@@ -90,4 +90,4 @@ func main() {
 
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
-* Version: 1.0.4
+* Version: 1.0.5
