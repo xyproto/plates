@@ -24,4 +24,4 @@ _testmain.go
 *.prof
 
 cmd/puppyart/puppyart
-cmd/puppyart/out.png
+cmd/puppyart/generated.png
