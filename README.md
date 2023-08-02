@@ -6,15 +6,15 @@ Package for dealing with RGB, HSV and HSL colors, reading and writing images.
 
 ## Example
 
-![puppy](cmd/puppyart/puppy.png)
+[![puppy](cmd/puppyart/puppy.png)](https://www.flickr.com/photos/49021451@N00/5679373686)
 
-The puppy image is from [Wikipedia](http://upload.wikimedia.org/wikipedia/commons/c/c7/Puppy_on_Halong_Bay.jpg).
+The above image is by Andrea Schaffer and is licensed under the [Creative Commons Attribution 2.0 Generic license](https://creativecommons.org/licenses/by/2.0/).
 
 ### Transformed output
 
 ![puppy](img/generated.png)
 
-The above image was generated with the following example program:
+The above image was generated with the following program:
 
 ```go
 package main
@@ -85,5 +85,4 @@ func main() {
 
 * License: BSD-3
 * Author: Alexander F. Rødseth &lt;xyproto@archlinux.org&gt;
-l
 * Version: 1.0.1
