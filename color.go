@@ -237,9 +237,6 @@ func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, thresh ui
 			// get the rgba color
 			// cr = inImage.At(x, y).(image.RGBAColor)
 			cr = color.RGBAModel.Convert(inImage.At(x, y)).(color.RGBA)
-			r = 0
-			g = 0
-			b = 0
 			a = 255
 			h, _, s = HLS(float64(cr.R)/255.0, float64(cr.G)/255.0, float64(cr.B)/255.0)
 			// Find the closest color of the three, measured in hue and saturation
