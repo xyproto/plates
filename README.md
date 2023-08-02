@@ -8,6 +8,10 @@ Plates comes with the `cmd/puppyart` utility.
 
 ## Puppyart
 
+### Quick installation
+
+    go install github.com/xyproto/plates/cmd/puppyart@latest
+
 ### Original image
 
 [![puppy](cmd/puppyart/puppy.png)](https://www.flickr.com/photos/49021451@N00/5679373686)
