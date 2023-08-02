@@ -7,3 +7,18 @@ github.com/chai2010/webp
 # github.com/jsummers/gobmp v0.0.0-20230614200233-a9de23ed2e25
 ## explicit
 github.com/jsummers/gobmp
+# github.com/lucasb-eyer/go-colorful v1.2.0
+## explicit; go 1.12
+github.com/lucasb-eyer/go-colorful
+# github.com/peterhellberg/gfx v0.0.0-20230526095554-e6202e653d52
+## explicit; go 1.17
+github.com/peterhellberg/gfx
+# github.com/xyproto/burnpal v0.0.0-20191014132200-bd9858647795
+## explicit; go 1.11
+github.com/xyproto/burnpal
+# github.com/xyproto/palgen v1.5.0
+## explicit; go 1.16
+github.com/xyproto/palgen
+# github.com/xyproto/xpm v1.3.0
+## explicit; go 1.11
+github.com/xyproto/xpm
