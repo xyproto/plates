@@ -1,12 +1,24 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
 	"log"
 
 	"github.com/xyproto/plates"
+)
+
+// Constants
+const (
+	version = "1.0.5"
+	usage   = `Usage: puppyart INPUT_IMAGE OUTPUT_IMAGE
+
+Options:
+  --help      Show this message and exit.
+  --version   Show the program version and exit.`
 )
 
 // convert takes an image file and modifies it based on a specified threshold and two given colors.
@@ -36,12 +48,34 @@ func convert(infilename string, thresh uint8, color1, color2 color.RGBA) image.I
 }
 
 func main() {
-	// Define input colors and process the image using convert function.
-	// Repeat this process for different color combinations.
-	image1 := convert("puppy.png", 255, color.RGBA{0, 0, 255, 255}, color.RGBA{255, 255, 255, 255})
-	image2 := convert("puppy.png", 255, color.RGBA{16, 63, 255, 255}, color.RGBA{0, 0, 0, 255})
-	image3 := convert("puppy.png", 255, color.RGBA{255, 0, 0, 255}, color.RGBA{255, 255, 0, 255})
-	image4 := convert("puppy.png", 255, color.RGBA{16, 255, 255, 255}, color.RGBA{255, 0, 255, 255})
+	helpFlag := flag.Bool("help", false, usage)
+	versionFlag := flag.Bool("version", false, "Display version info")
+
+	flag.Parse()
+
+	// Display help info
+	if *helpFlag {
+		fmt.Println(usage)
+		return
+	}
+
+	// Display version info
+	if *versionFlag {
+		fmt.Printf("Version: %s\n", version)
+		return
+	}
+
+	if flag.NArg() < 2 {
+		log.Fatalln("Please provide both input and output image names.")
+	}
+
+	infile := flag.Arg(0)
+	outfile := flag.Arg(1)
+
+	image1 := convert(infile, 255, color.RGBA{0, 0, 255, 255}, color.RGBA{255, 255, 255, 255})
+	image2 := convert(infile, 255, color.RGBA{16, 63, 255, 255}, color.RGBA{0, 0, 0, 255})
+	image3 := convert(infile, 255, color.RGBA{255, 0, 0, 255}, color.RGBA{255, 255, 0, 255})
+	image4 := convert(infile, 255, color.RGBA{16, 255, 255, 255}, color.RGBA{255, 0, 255, 255})
 
 	// Create a new image to contain the 4 processed images.
 	width := image1.Bounds().Dx() * 2
@@ -55,7 +89,7 @@ func main() {
 	draw.Draw(newimage, image.Rect(image1.Bounds().Dx(), image1.Bounds().Dy(), width, height), image4, newimage.Bounds().Min, draw.Src)
 
 	// Write the final image to file.
-	if err := plates.Write("generated.png", newimage); err != nil {
+	if err := plates.Write(outfile, newimage); err != nil {
 		log.Fatalln(err)
 	}
 }
