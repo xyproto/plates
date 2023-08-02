@@ -1,6 +1,6 @@
 # Plates ![Build](https://github.com/xyproto/plates/workflows/Build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/plates)](https://goreportcard.com/report/github.com/xyproto/plates) [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/plates/main/LICENSE)
 
-Package for dealing with RGB, HSV and HSL colors, reading and writing images.
+Package for dealing with RGB, HSV and HSL colors, mixing colors and for reading and writing images.
 
 * [Online API documentation](http://godoc.org/github.com/xyproto/plates)
 
