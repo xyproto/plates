@@ -1,11 +1,12 @@
 # Plates ![Build](https://github.com/xyproto/plates/workflows/Build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/xyproto/plates)](https://goreportcard.com/report/github.com/xyproto/plates) [![License](https://img.shields.io/badge/license-BSD-green.svg?style=flat)](https://raw.githubusercontent.com/xyproto/plates/main/LICENSE)
 
-
 Package for dealing with RGB, HSV and HSL colors, reading and writing images.
 
 * [Online API documentation](http://godoc.org/github.com/xyproto/plates)
 
-## Example
+Plates comes with the `cmd/puppyart` utility.
+
+## Puppyart
 
 ### Original image
 
@@ -13,13 +14,13 @@ Package for dealing with RGB, HSV and HSL colors, reading and writing images.
 
 The above image is by Andrea Schaffer and is licensed under [cc-by-2.0](https://creativecommons.org/licenses/by/2.0/).
 
-### Generated image
+### Transformed image
 
 ![puppy](img/generated.png)
 
-### Example program
+## Example code
 
-The generated image was created with the following program:
+The transformed image was generated with the following program:
 
 ```go
 package main
