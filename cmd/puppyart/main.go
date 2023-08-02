@@ -13,7 +13,7 @@ import (
 
 // Constants
 const (
-	version = "1.0.5"
+	version = "1.0.6"
 	usage   = `Usage: puppyart INPUT_IMAGE OUTPUT_IMAGE
 
 Options:
