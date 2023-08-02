@@ -16,6 +16,8 @@ import (
 	"github.com/xyproto/xpm"
 )
 
+// Read tries to read the given image filename and return an image.Image
+// The supported extensions are: .png, .jpg, .jpeg, .gif, .ico, .bmp and .webp
 func Read(filename string) (image.Image, error) {
 	f, err := os.Open(filename)
 	if err != nil {
@@ -40,6 +42,8 @@ func Read(filename string) (image.Image, error) {
 	return nil, errors.New("unrecognized file extension: " + filepath.Ext(filename))
 }
 
+// Write tries to write then given image.Image to a file.
+// The supported extensions are: .png, .jpg, .jpeg. .gif, .ico, .bmp, .webp and .xpm
 func Write(filename string, img image.Image) error {
 	f, err := os.Create(filename)
 	if err != nil {
