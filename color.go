@@ -1,4 +1,4 @@
-// Package plates can deal with RGB, HSV, HSL and PNG images
+// Package plates provides utilities for manipulating colors and images.
 package plates
 
 import (
@@ -7,7 +7,8 @@ import (
 	"math"
 )
 
-// Red will pick out only the red colors from an image and return an image
+// Red function isolates and returns the red channel from an image.
+// It returns a new image where only the red component of each pixel's color is retained.
 func Red(m image.Image) image.Image {
 	var (
 		rect     = m.Bounds()
@@ -26,7 +27,8 @@ func Red(m image.Image) image.Image {
 	return newImage
 }
 
-// Green will pick out only the green colors from an image and return an image
+// Green function isolates and returns the green channel from an image.
+// It returns a new image where only the green component of each pixel's color is retained.
 func Green(m image.Image) image.Image {
 	var (
 		rect     = m.Bounds()
@@ -45,7 +47,8 @@ func Green(m image.Image) image.Image {
 	return newImage
 }
 
-// Blue will pick out only the blue colors from an image and return an image
+// Blue function isolates and returns the blue channel from an image.
+// It returns a new image where only the blue component of each pixel's color is retained.
 func Blue(m image.Image) image.Image {
 	var (
 		rect     = m.Bounds()
@@ -64,9 +67,10 @@ func Blue(m image.Image) image.Image {
 	return newImage
 }
 
-// CloseTo1 will pick out only the colors close to the given color,
-// within a given threshold, and return an image.
-func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
+// CloseTo1 function isolates pixels in an image that are similar to a target color within a given threshold.
+// It returns a new image where only the pixels close to the target color are retained.
+// Pixels that do not meet the threshold will be set to black (RGB{0,0,0}).
+func CloseTo1(m image.Image, target color.RGBA, threshold uint8) image.Image {
 	var (
 		rect       = m.Bounds()
 		c          color.Color
@@ -82,13 +86,13 @@ func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 			g = 0
 			b = 0
 			a = cr.A
-			if abs(int8(target.R)-int8(cr.R)) < thresh {
+			if abs(int8(target.R)-int8(cr.R)) < threshold {
 				r = target.R
 			}
-			if abs(int8(target.G)-int8(cr.G)) < thresh {
+			if abs(int8(target.G)-int8(cr.G)) < threshold {
 				g = target.G
 			}
-			if abs(int8(target.B)-int8(cr.B)) < thresh {
+			if abs(int8(target.B)-int8(cr.B)) < threshold {
 				b = target.B
 			}
 			c = color.RGBA{r, g, b, a}
@@ -101,7 +105,7 @@ func CloseTo1(m image.Image, target color.RGBA, thresh uint8) image.Image {
 // CloseTo2 will pick out only the colors close to the given color,
 // within a given threshold. Make it uniform.
 // Zero alpha to unused pixels in returned image.
-func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
+func CloseTo2(m image.Image, target color.RGBA, threshold uint8) image.Image {
 	var (
 		rect       = m.Bounds()
 		c          color.Color
@@ -117,7 +121,7 @@ func CloseTo2(m image.Image, target color.RGBA, thresh uint8) image.Image {
 			g = 0
 			b = 0
 			a = 0
-			if abs(int8(target.R)-int8(cr.R)) < thresh || abs(int8(target.G)-int8(cr.G)) < thresh || abs(int8(target.B)-int8(cr.B)) < thresh {
+			if abs(int8(target.R)-int8(cr.R)) < threshold || abs(int8(target.G)-int8(cr.G)) < threshold || abs(int8(target.B)-int8(cr.B)) < threshold {
 				r = target.R
 				g = target.G
 				b = target.B
@@ -219,7 +223,7 @@ func HSV(cr color.RGBA) (uint8, uint8, uint8) {
 }
 
 // Separate3 an image into three images with the three given colors and a given threshold.
-func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, thresh uint8) (image.Image, image.Image, image.Image) {
+func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, threshold uint8) (image.Image, image.Image, image.Image) {
 	var (
 		rect       = inImage.Bounds()
 		cr         color.RGBA
@@ -243,7 +247,7 @@ func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, thresh ui
 			if ((fabs(h-hue1) < fabs(h-hue2)) && (fabs(h-hue1) < fabs(h-hue3))) ||
 				((fabs(s-s1) < fabs(s-s2)) && (fabs(s-s1) < fabs(s-s3))) {
 				// Only add if the color is close enough
-				if abs(int8(color1.R)-int8(cr.R)) < thresh || abs(int8(color1.G)-int8(cr.G)) < thresh || abs(int8(color1.B)-int8(cr.B)) < thresh {
+				if abs(int8(color1.R)-int8(cr.R)) < threshold || abs(int8(color1.G)-int8(cr.G)) < threshold || abs(int8(color1.B)-int8(cr.B)) < threshold {
 					r = color1.R
 					g = color1.G
 					b = color1.B
@@ -252,7 +256,7 @@ func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, thresh ui
 			} else if ((fabs(h-hue2) < fabs(h-hue1)) && (fabs(h-hue2) < fabs(h-hue3))) ||
 				((fabs(s-s2) < fabs(s-s1)) && (fabs(s-s2) < fabs(s-s3))) {
 				// Only add if the color is close enough
-				if abs(int8(color2.R)-int8(cr.R)) < thresh || abs(int8(color2.G)-int8(cr.G)) < thresh || abs(int8(color2.B)-int8(cr.B)) < thresh {
+				if abs(int8(color2.R)-int8(cr.R)) < threshold || abs(int8(color2.G)-int8(cr.G)) < threshold || abs(int8(color2.B)-int8(cr.B)) < threshold {
 					r = color2.R
 					g = color2.G
 					b = color2.B
@@ -260,7 +264,7 @@ func Separate3(inImage image.Image, color1, color2, color3 color.RGBA, thresh ui
 				}
 			} else if ((fabs(h-hue3) < fabs(h-hue1)) && (fabs(h-hue3) < fabs(h-hue2))) ||
 				((fabs(s-s3) < fabs(s-s1)) && (fabs(s-s3) < fabs(s-s2))) {
-				if abs(int8(color3.R)-int8(cr.R)) < thresh || abs(int8(color3.G)-int8(cr.G)) < thresh || abs(int8(color3.B)-int8(cr.B)) < thresh {
+				if abs(int8(color3.R)-int8(cr.R)) < threshold || abs(int8(color3.G)-int8(cr.G)) < threshold || abs(int8(color3.B)-int8(cr.B)) < threshold {
 					r = color3.R
 					g = color3.G
 					b = color3.B
