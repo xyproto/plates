@@ -1,4 +1,4 @@
-module github.com/xyproto/imagelib
+module github.com/xyproto/plates
 
 go 1.20
 
